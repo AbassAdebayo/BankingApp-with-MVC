@@ -2,10 +2,13 @@
 
 namespace BankingApp.Models.Entities
 {
-    public class AccountDetails(Guid userId) : BaseEntity
+ 
+    public class AccountDetails(Guid userId, string accountNumber) : BaseEntity
     {
-        public Guid UserId = userId;
-        public required string AccountNumber { get; set; }
-        public required decimal AccounBalance { get; set; }
+
+        public Guid UserId { get; init; } = userId;
+        public User? User { get; set; }
+        public string AccountNumber { get; init; } = accountNumber;
+        public decimal AccountBalance { get; set; }
     }
 }
