@@ -3,12 +3,18 @@
 namespace BankingApp.Models.Entities
 {
  
-    public class AccountDetails(Guid userId, string accountNumber) : BaseEntity
+    public class AccountDetails : BaseEntity
     {
 
-        public Guid UserId { get; init; } = userId;
+        public Guid UserId { get; set; }
         public User? User { get; set; }
-        public string AccountNumber { get; init; } = accountNumber;
-        public decimal AccountBalance { get; set; }
+        public string AccountNumber { get; set; }
+        public decimal? AccountBalance { get; set; }
+
+        public AccountDetails(Guid userId, string accountNumber)
+        {
+            UserId = userId;
+            AccountNumber = accountNumber;
+        }
     }
 }

@@ -1,5 +1,10 @@
-﻿using BankingApp.Models.Entities;
+﻿using BankingApp.Models;
+using BankingApp.Models.Entities;
+using BankingApp.Models.Enum;
+using MassTransit;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace BankingApp.Persistence.Context
 {
@@ -7,11 +12,95 @@ namespace BankingApp.Persistence.Context
     {
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //builder.Entity<AccountDetails>()
-            //    .HasOne(a => a.User)
-            //    .WithOne(u => u.AccountDetails)
-            //    .HasForeignKey<AccountDetails>(a => a.UserId);
+            builder.Entity<User>()
+                .HasOne(u => u.AccountDetails)
+                .WithOne(ac => ac.User)
+                .HasForeignKey<AccountDetails>(ac => ac.UserId);
 
+            SeedAdminData(builder);
+            SeedRoleData(builder);
+
+
+        }
+
+        private static void SeedAdminData(ModelBuilder modelBuilder)
+        {
+            Guid adminUserId = new Guid("d2719e67-52f4-4f9c-bdb2-123456789abc");
+            Guid bankId = new Guid("d2719e67-52f4-4f9c-bdb2-225456789abc");
+            Guid adminRoleId = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e86897e42");
+
+            var role = new Role("Admin", "Has full permissions")
+            {
+                DateCreated = DateTime.UtcNow,
+                Id = adminRoleId
+            };
+            
+
+            string firstName = "Admin";
+            string lastName = "Manager";
+            string email = "admin001@gmail.com";
+            DateTime dob = DateTime.SpecifyKind(new DateTime(1990, 11, 10), DateTimeKind.Utc);
+            string phoneNumber = "09055123478";
+            Gender gender = Gender.Male;
+            var hasher = new PasswordHasher<object>();
+            var passwordHash = hasher.HashPassword(null, "Admin@001");
+
+            var bankBranch = BankBranch.KwaraState;
+
+            var bank = new Bank("GTB", bankBranch)
+            {
+                Id = bankId,
+                DateCreated = DateTime.UtcNow
+            };
+
+            var adminAccountDetails = new AccountDetails(adminUserId, "0234032001")
+            {
+                DateCreated = DateTime.UtcNow,
+                Id = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e98c77e42"),
+                UserId = adminUserId
+            };
+            var adminUser = new User
+                (
+                    firstName,
+                    lastName,
+                    email,
+                    dob,
+                    passwordHash,
+                    phoneNumber,
+                    gender,
+                    bankId,
+                    adminRoleId
+
+
+
+
+
+                )
+            {
+                Id = adminUserId,
+                DateCreated = DateTime.UtcNow,
+
+            };
+
+            modelBuilder.Entity<Role>().HasData(role);
+            modelBuilder.Entity<Bank>().HasData(bank);
+            modelBuilder.Entity<User>().HasData(adminUser);
+            modelBuilder.Entity<AccountDetails>().HasData(adminAccountDetails);
+
+        }
+
+   
+
+        private void SeedRoleData(ModelBuilder modelBuilder)
+        {
+
+            var role = new Role("Customer")
+            {
+                Id = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e86c77e76"),
+                DateCreated = DateTime.SpecifyKind(new DateTime(2025, 11, 10), DateTimeKind.Utc),
+            };
+
+            modelBuilder.Entity<Role>().HasData(role);
         }
 
         DbSet<AccountDetails> AccountDetails => Set<AccountDetails>();

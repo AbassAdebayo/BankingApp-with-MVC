@@ -3,17 +3,25 @@ using MassTransit;
 
 namespace BankingApp.Models.Entities
 {
-    public class Bank(string name, BankBranch bankBranch) : BaseEntity
+    public class Bank : BaseEntity
     {
-        public required string Name { get; init; } = name;
-        public required BankBranch BankBranch { get; init; } = bankBranch;
+        public string Name { get; set; }
+        public BankBranch BankBranch { get; set; }
         public ICollection<User> Users { get; set; } = [];
 
-        //public void UpdateBankName(string name)
-        //{
-        //    if(string.IsNullOrEmpty(name)) throw new ArgumentNullException("Name cannot be empty");
-        //     = name;
-            
-        //}
+
+        public Bank(string name, BankBranch bankBranch)
+        {
+            Name = name;
+            BankBranch = bankBranch;
+        }
+
+        public void UpdateBankName(string name)
+        {
+            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("Name cannot be empty");
+             Name = name;
+
+
+        }
     }
 }

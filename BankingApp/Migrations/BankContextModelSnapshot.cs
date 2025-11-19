@@ -28,7 +28,7 @@ namespace BankingApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<decimal>("AccountBalance")
+                    b.Property<decimal?>("AccountBalance")
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("AccountNumber")
@@ -50,6 +50,16 @@ namespace BankingApp.Migrations
                         .IsUnique();
 
                     b.ToTable("AccountDetails");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e98c77e42"),
+                            AccountNumber = "0234032001",
+                            DateCreated = new DateTime(2025, 11, 19, 18, 36, 11, 46, DateTimeKind.Utc).AddTicks(58),
+                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = new Guid("d2719e67-52f4-4f9c-bdb2-123456789abc")
+                        });
                 });
 
             modelBuilder.Entity("BankingApp.Models.Entities.Bank", b =>
@@ -74,6 +84,57 @@ namespace BankingApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Banks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("d2719e67-52f4-4f9c-bdb2-225456789abc"),
+                            BankBranch = 7,
+                            DateCreated = new DateTime(2025, 11, 19, 18, 36, 11, 45, DateTimeKind.Utc).AddTicks(7022),
+                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "GTB"
+                        });
+                });
+
+            modelBuilder.Entity("BankingApp.Models.Entities.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e86897e42"),
+                            DateCreated = new DateTime(2025, 11, 19, 18, 36, 10, 884, DateTimeKind.Utc).AddTicks(1389),
+                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Has full permissions",
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e86c77e76"),
+                            DateCreated = new DateTime(2025, 11, 10, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Customer"
+                        });
                 });
 
             modelBuilder.Entity("BankingApp.Models.Entities.User", b =>
@@ -91,6 +152,9 @@ namespace BankingApp.Migrations
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -98,6 +162,9 @@ namespace BankingApp.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<byte>("Gender")
+                        .HasColumnType("tinyint unsigned");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -107,19 +174,37 @@ namespace BankingApp.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("PasswordSalt")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BankId");
 
+                    b.HasIndex("RoleId");
+
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("d2719e67-52f4-4f9c-bdb2-123456789abc"),
+                            BankId = new Guid("d2719e67-52f4-4f9c-bdb2-225456789abc"),
+                            DateCreated = new DateTime(2025, 11, 19, 18, 36, 11, 46, DateTimeKind.Utc).AddTicks(9122),
+                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateTime(1990, 11, 10, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "admin001@gmail.com",
+                            FirstName = "Admin",
+                            Gender = (byte)1,
+                            LastName = "Manager",
+                            PasswordHash = "AQAAAAIAAYagAAAAEA882fWHM9TCRPhDrZ333KhcQn4XNLlpmYnbnr0yuVb21I2M+tGqCJA0K5ZEICt92w==",
+                            PhoneNumber = "09055123478",
+                            RoleId = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e86897e42")
+                        });
                 });
 
             modelBuilder.Entity("BankingApp.Models.Entities.AccountDetails", b =>
@@ -141,7 +226,15 @@ namespace BankingApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BankingApp.Models.Entities.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Bank");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("BankingApp.Models.Entities.Bank", b =>

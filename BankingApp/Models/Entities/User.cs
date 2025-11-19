@@ -1,19 +1,43 @@
 ﻿using BankingApp.Contracts.Entities;
+using BankingApp.Models.Enum;
 using MassTransit;
+using Microsoft.AspNetCore.Identity;
+using System.Reflection;
 
 namespace BankingApp.Models.Entities
 {
-    public class User(string firstName, string lastName, string email, string passwordHash,
-        string phoneNumber, Guid bankId) : BaseEntity
+    
+    public class User: BaseEntity
     {
-        public required Guid BankId { get; init; } = bankId;
+        public Guid BankId { get; set; } 
+        public Guid RoleId { get; set; }
+        public Role Role { get; set; }
+        public Gender Gender { get; set; } 
         public Bank Bank { get; set; }
-        public required AccountDetails AccountDetails { get; set; }
-        public required string FirstName { get; init; } = firstName;
-        public required string LastName { get; init; } = lastName;
-        public required string Email { get; init; } = email;
-        public required string PasswordHash { get; init; } = passwordHash;
-        public required string PhoneNumber { get; init; } = phoneNumber;
-        public required string PasswordSalt { get; set; }
+        public  AccountDetails AccountDetails { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public DateTime DateOfBirth { get; set; } 
+        public string PasswordHash { get; set; }
+        public string PhoneNumber { get; set; }
+
+        public User() { }
+
+        public User(string firstName, string lastName, string email, DateTime dateOfBirth, string passwordHash,
+        string phoneNumber, Gender gender, Guid bankId, Guid roleId)
+        {
+            BankId  = bankId;
+            RoleId = roleId;
+            Gender = gender;
+            FirstName  = firstName;
+            LastName = lastName;
+            Email = email;
+            DateOfBirth  = dateOfBirth;
+            PasswordHash = passwordHash;
+            PhoneNumber = phoneNumber;
+        }
+        
+        
     }
 }
