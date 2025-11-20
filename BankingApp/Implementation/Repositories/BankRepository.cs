@@ -17,6 +17,11 @@ namespace BankingApp.Implementation.Repositories
             return bank;
         }
 
+        public async Task<bool> BankExistsByBranchName(BankBranch bankBranch)
+        {
+            return await _bankContext.Set<Bank>().AnyAsync(b => b.BankBranch == bankBranch);
+        }
+
         public async Task<bool> Delete(Bank bank)
         {
              _bankContext.Set<Bank>().Remove(bank);

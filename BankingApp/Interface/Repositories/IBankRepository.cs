@@ -11,6 +11,7 @@ namespace BankingApp.Interface.Repositories
         Task<Bank> GetById(Guid id);
         Task<List<Bank>> ListOfBanks();
         Task<List<Bank>> ListOfBanksByBranchName(BankBranch bankBranch);
+        Task<bool> BankExistsByBranchName(BankBranch bankBranch);
     }
 }
 

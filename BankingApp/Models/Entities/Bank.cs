@@ -7,13 +7,15 @@ namespace BankingApp.Models.Entities
     {
         public string Name { get; set; }
         public BankBranch BankBranch { get; set; }
+        public string? Description { get; set; }
         public ICollection<User> Users { get; set; } = [];
 
 
-        public Bank(string name, BankBranch bankBranch)
+        public Bank(string name, BankBranch bankBranch, string description = null)
         {
             Name = name;
             BankBranch = bankBranch;
+            Description = description;
         }
 
         public void UpdateBankName(string name)
