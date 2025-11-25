@@ -9,11 +9,11 @@ namespace BankingApp.Implementation.Repositories
     public class BankRepository(BankContext bankContext) : IBankRepository
     {
         private readonly BankContext _bankContext = bankContext ?? throw new ArgumentNullException(nameof(bankContext));
-  
+
         public async Task<Bank> Add(Bank bank)
         {
-           await _bankContext.Set<Bank>().AddAsync(bank);
-           await _bankContext.SaveChangesAsync();
+            await _bankContext.Set<Bank>().AddAsync(bank);
+            await _bankContext.SaveChangesAsync();
             return bank;
         }
 
@@ -24,10 +24,10 @@ namespace BankingApp.Implementation.Repositories
 
         public async Task<bool> Delete(Bank bank)
         {
-             _bankContext.Set<Bank>().Remove(bank);
+            _bankContext.Set<Bank>().Remove(bank);
             int result = await _bankContext.SaveChangesAsync();
             return result > 0;
-            
+
         }
 
         public async Task<Bank> GetById(Guid id)

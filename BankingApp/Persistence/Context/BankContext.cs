@@ -1,10 +1,8 @@
 ﻿using BankingApp.Models;
 using BankingApp.Models.Entities;
 using BankingApp.Models.Enum;
-using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace BankingApp.Persistence.Context
 {
@@ -34,7 +32,7 @@ namespace BankingApp.Persistence.Context
                 DateCreated = DateTime.UtcNow,
                 Id = adminRoleId
             };
-            
+
 
             string firstName = "Admin";
             string lastName = "Manager";
@@ -89,7 +87,7 @@ namespace BankingApp.Persistence.Context
 
         }
 
-   
+
 
         private void SeedRoleData(ModelBuilder modelBuilder)
         {

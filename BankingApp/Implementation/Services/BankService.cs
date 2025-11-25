@@ -28,7 +28,7 @@ namespace BankingApp.Implementation.Services
             var newBank = new Bank(request.Name, request.BankBranch, request.Description);
             var createBank = await _bankRepository.Add(newBank);
 
-            if(createBank == null)
+            if (createBank == null)
             {
                 _logger.LogError("Bank couldn't be created");
                 return new BaseResponse<bool>
@@ -48,17 +48,17 @@ namespace BankingApp.Implementation.Services
         public async Task<BaseResponse<bool>> Delete(Guid id)
         {
             var bankToDelete = await _bankRepository.GetById(id);
-            if(bankToDelete == null)
+            if (bankToDelete == null)
             {
                 _logger.LogError("Bank doesn't exist");
                 return new BaseResponse<bool>
                 {
                     Message = "Bank doesn't exist",
                     Status = false
-                }; 
+                };
             }
             var deleteBank = _bankRepository.Delete(bankToDelete);
-            if(deleteBank == null)
+            if (deleteBank == null)
             {
                 _logger.LogError("Bank couldn't be deleted");
                 return new BaseResponse<bool>
@@ -81,7 +81,7 @@ namespace BankingApp.Implementation.Services
             var banks = await _bankRepository.ListOfBanks();
             if (!banks.Any())
             {
-                _logger.LogError("No bank found"); 
+                _logger.LogError("No bank found");
                 return new BaseResponse<List<BankDto>>
                 {
                     Message = "No bank found",

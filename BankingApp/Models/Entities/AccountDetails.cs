@@ -2,7 +2,7 @@
 
 namespace BankingApp.Models.Entities
 {
- 
+
     public class AccountDetails : BaseEntity
     {
 

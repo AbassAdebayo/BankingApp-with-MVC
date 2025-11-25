@@ -1,5 +1,4 @@
 ﻿using BankingApp.Contracts.Entities;
-using MassTransit;
 
 namespace BankingApp.Models.Entities
 {
@@ -21,7 +20,7 @@ namespace BankingApp.Models.Entities
         public void UpdateBankName(string name)
         {
             if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("Name cannot be empty");
-             Name = name;
+            Name = name;
 
 
         }

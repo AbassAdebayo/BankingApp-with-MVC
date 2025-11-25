@@ -1,7 +1,6 @@
 ﻿using BankingApp.Models;
 using BankingApp.Models.DTOs;
 using BankingApp.Models.DTOs.Bank;
-using BankingApp.Models.Entities;
 
 namespace BankingApp.Interface.Services
 {

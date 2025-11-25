@@ -1,7 +1,6 @@
 ﻿using BankingApp.Interface.Services;
 using BankingApp.Models.DTOs.Bank;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace BankingApp.Controllers
 {
@@ -34,7 +33,7 @@ namespace BankingApp.Controllers
                 ViewBag.Error = bank.Status;
                 return View();
             }
-            
+
         }
     }
 }

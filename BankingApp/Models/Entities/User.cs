@@ -1,24 +1,21 @@
 ﻿using BankingApp.Contracts.Entities;
 using BankingApp.Models.Enum;
-using MassTransit;
-using Microsoft.AspNetCore.Identity;
-using System.Reflection;
 
 namespace BankingApp.Models.Entities
 {
-    
-    public class User: BaseEntity
+
+    public class User : BaseEntity
     {
-        public Guid BankId { get; set; } 
+        public Guid BankId { get; set; }
         public Guid RoleId { get; set; }
         public Role Role { get; set; }
-        public Gender Gender { get; set; } 
+        public Gender Gender { get; set; }
         public Bank Bank { get; set; }
-        public  AccountDetails AccountDetails { get; set; }
+        public AccountDetails AccountDetails { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public DateTime DateOfBirth { get; set; } 
+        public DateTime DateOfBirth { get; set; }
         public string PasswordHash { get; set; }
         public string PhoneNumber { get; set; }
 
@@ -27,17 +24,17 @@ namespace BankingApp.Models.Entities
         public User(string firstName, string lastName, string email, DateTime dateOfBirth, string passwordHash,
         string phoneNumber, Gender gender, Guid bankId, Guid roleId)
         {
-            BankId  = bankId;
+            BankId = bankId;
             RoleId = roleId;
             Gender = gender;
-            FirstName  = firstName;
+            FirstName = firstName;
             LastName = lastName;
             Email = email;
-            DateOfBirth  = dateOfBirth;
+            DateOfBirth = dateOfBirth;
             PasswordHash = passwordHash;
             PhoneNumber = phoneNumber;
         }
-        
-        
+
+
     }
 }

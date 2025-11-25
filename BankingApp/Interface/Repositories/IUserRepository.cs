@@ -1,5 +1,4 @@
-﻿using BankingApp.Models;
-using BankingApp.Models.Entities;
+﻿using BankingApp.Models.Entities;
 
 namespace BankingApp.Interface.Repositories
 {
@@ -9,7 +8,9 @@ namespace BankingApp.Interface.Repositories
         Task<User> Update(User user);
         Task<bool> Delete(User user);
         Task<User> GetById(Guid id);
-        Task<List<User>> ListOfBanks();
-        Task<List<User>> ListOfUsersBank(string bankName);
+        Task<User> GetUserAndRole(Guid userId);
+        Task<List<User>> ListOfUsers();
+        Task<List<User>> ListOfUsersByBank(string bankName);
+        Task<bool> Any(Func<User, bool> expression);
     }
 }
