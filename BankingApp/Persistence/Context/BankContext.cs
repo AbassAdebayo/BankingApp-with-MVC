@@ -36,6 +36,7 @@ namespace BankingApp.Persistence.Context
 
             string firstName = "Admin";
             string lastName = "Manager";
+            string address = "123 Admin Street, City, Country";
             string email = "admin001@gmail.com";
             DateTime dob = DateTime.SpecifyKind(new DateTime(1990, 11, 10), DateTimeKind.Utc);
             string phoneNumber = "09055123478";
@@ -51,16 +52,18 @@ namespace BankingApp.Persistence.Context
                 DateCreated = DateTime.UtcNow
             };
 
-            var adminAccountDetails = new AccountDetails(adminUserId, "0234032001")
+            var adminAccountDetails = new AccountDetails(adminUserId, "0234032001", AccountType.Savings)
             {
                 DateCreated = DateTime.UtcNow,
                 Id = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e98c77e42"),
-                UserId = adminUserId
+                UserId = adminUserId,
+                
             };
             var adminUser = new User
                 (
                     firstName,
                     lastName,
+                    address,
                     email,
                     dob,
                     passwordHash,

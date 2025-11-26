@@ -108,7 +108,7 @@ namespace BankingApp.Implementation.Services
             throw new NotImplementedException();
         }
 
-        public Task<BaseResponse<List<BankDto>>> ListOfBanksByBranchName(BankBranch bankBranch)
+        public Task<BaseResponse<List<BankDto>>> ListOfBanksByBranchNameAsync(BankBranch bankBranch)
         {
             throw new NotImplementedException();
         }

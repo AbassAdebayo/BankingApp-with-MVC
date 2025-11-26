@@ -2,6 +2,7 @@
 using BankingApp.Interface.Repositories;
 using BankingApp.Interface.Services;
 using BankingApp.Models.DTOs;
+using BankingApp.Models.DTOs.Bank;
 using BankingApp.Models.DTOs.User;
 using BankingApp.Models.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -24,10 +25,10 @@ namespace BankingApp.Implementation.Services
             var userExists = await _userRepository.Any(u => u.Email == request.Email && u.Bank.Name == bank.Name);
             if (userExists)
             {
-                _logger.LogError("User with email already exist");
+                _logger.LogError($"User with email already has account with {bank.Name}");
                 return new BaseResponse<bool>
                 {
-                    Message = "User with email already exist",
+                    Message = $"User with email already has account with {bank.Name}",
                     Status = false
                 };
             }
@@ -37,18 +38,168 @@ namespace BankingApp.Implementation.Services
                 Message = "Password doesnt match!",
                 Status = false,
             };
+
+            (var passwordResult, var message) = ValidatePassword(request.PasswordHash);
+            if (!passwordResult) return new BaseResponse<bool> { Message = message, Status = false };
+
+            var hashPassword = _identityService.GetPasswordHash(request.PasswordHash);
+
+            var user = new User
+                (
+                    request.FirstName,
+                    request.LastName,
+                    request.Address,
+                    request.Email,
+                    request.DateOfBirth,
+                    hashPassword,
+                    request.PhoneNumber,
+                    request.Gender,
+                    request.BankId
+
+
+                );
+            var accountNumber = GenerateAccountNumber();
+            user.AccountDetails = new AccountDetails(accountNumber, request.AccountType)
+            { 
+                AccountBalance = 500m, 
+            };
+
+            var adduserAccountResult = await _userManager.CreateAsync(user);
+
+            if (!adduserAccountResult.Succeeded)
+            {
+                _logger.LogError("User creation failed");
+                throw new Exception("User creation failed: " + string.Join(", ", adduserAccountResult.Errors.Select(e => e.Description)));
+            }
+
+            var addUserToRoleResult = await _userManager.AddToRoleAsync(user, "Customer");
+
+            if (!addUserToRoleResult.Succeeded)
+            {
+                throw new Exception("Adding roles failed: " + string.Join(", ", addUserToRoleResult.Errors.Select(e => e.Description)));
+            }
+
+            return new BaseResponse<bool>
+            {
+                Message = "User created successfully",
+                Status = true
+            };
+
         }
 
-        public Task<BaseResponse<UserDto>> GetUserByEmail(string email, CancellationToken cancellationToken)
+
+        public async Task<BaseResponse<UserDto>> GetCustomerUserProfileByUserIdAsync(Guid userId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var customerProfile = await _userRepository.GetUserProfile(userId);
+            if (customerProfile == null)
+            {
+                _logger.LogError($"Customer user with ID: {userId} not found.");
+                return new BaseResponse<UserDto>
+                {
+                    Message = $"Customer user with ID: {userId} not found.",
+                    Status = false
+                };
+            }
+            _logger.LogInformation($"Customer user profile retrieved successfully for ID: {userId}.");
+            return new BaseResponse<UserDto>
+            {
+                Message = $"Customer user profile retrieved successfully for ID: {userId}.",
+                Status = true,
+                Data = new UserDto
+                {
+                    Id = customerProfile.Id,
+                    FirstName = customerProfile.FirstName,
+                    LastName = customerProfile.LastName,
+                    PhoneNumber = customerProfile.PhoneNumber,
+                    Email = customerProfile.Email,
+                    DateOfBirth = customerProfile.DateOfBirth,
+                    Address = customerProfile.Address,
+                    Bank = new BankDto
+                    {
+                        Id = customerProfile.Bank.Id,
+                        Name = customerProfile.Bank.Name,
+                        BankBranch = customerProfile.Bank.BankBranch,
+                        Description = customerProfile.Bank.Description,
+
+                    },
+                    AccountDetails = new AccountDetailsDto
+                    {
+                        Id = customerProfile.AccountDetails.Id,
+                        AccountNumber = customerProfile.AccountDetails.AccountNumber,
+                        AccountType = customerProfile.AccountDetails.AccountType,
+                        Balance = customerProfile.AccountDetails.AccountBalance,
+                    }
+
+                }
+            };
         }
 
-        public Task<BaseResponse<UserDto>> GetUserProfileByUserId(Guid userId, CancellationToken cancellationToken)
+        public async Task<BaseResponse<IReadOnlyList<UserDto>>> ListOfCustomerUsersByBankAsync(string bankName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var customers = await _userRepository.ListOfUsersByBank(bankName);
+            if (customers == null || !customers.Any())
+            {
+                _logger.LogError($"No customer users found for bank: {bankName}.");
+                return new BaseResponse<IReadOnlyList<UserDto>>
+                {
+                    Message = $"No customer users found for bank: {bankName}.",
+                    Status = false
+                };
+            }
+            _logger.LogInformation($"Customer users retrieved successfully for bank: {bankName}.");
+            return new BaseResponse<IReadOnlyList<UserDto>>
+            {
+                Message = $"Customer users retrieved successfully for bank: {bankName}.",
+                Status = true,
+                Data = customers.Select(c => new UserDto
+                {
+                   Id = c.Id,
+                   FirstName = c.FirstName,
+                   LastName = c.LastName,
+                   PhoneNumber = c.PhoneNumber,
+                }).ToList(),
+                
+            };
         }
 
+        public async Task<BaseResponse<IReadOnlyList<UserDto>>> GetAllCustomerUsersAsync(CancellationToken cancellationToken)
+        {
+            var customers = await _userRepository.ListOfUsers();
+            if (customers == null || !customers.Any())
+            {
+                _logger.LogError($"No customer users found.");
+                return new BaseResponse<IReadOnlyList<UserDto>>
+                {
+                    Message = $"No customer users found.",
+                    Status = false
+                };
+            }
+            _logger.LogInformation($"Customer users retrieved successfully.");
+            return new BaseResponse<IReadOnlyList<UserDto>>
+            {
+                Message = $"Customer users retrieved successfully.",
+                Status = true,
+                Data = customers.Select(c => new UserDto
+                {
+                    Id = c.Id,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    PhoneNumber = c.PhoneNumber,
+                }).ToList(),
+
+            };
+        }
+
+        private static string GenerateAccountNumber()
+        {
+            Random random = new Random();
+            string accountNumber = string.Empty;
+            for (int i = 0; i < 10; i++)
+            {
+                accountNumber += random.Next(0, 10).ToString();
+            }
+            return accountNumber;
+        }
         private static (bool, string?) ValidatePassword(string password)
         {
             // Minimum length of password
@@ -105,5 +256,6 @@ namespace BankingApp.Implementation.Services
             // Password is valid
             return (true, null);
         }
+
     }
 }

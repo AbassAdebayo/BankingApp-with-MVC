@@ -18,10 +18,11 @@ namespace BankingApp.Models.Entities
         public DateTime DateOfBirth { get; set; }
         public string PasswordHash { get; set; }
         public string PhoneNumber { get; set; }
+        public string Address { get; set; }
 
         public User() { }
 
-        public User(string firstName, string lastName, string email, DateTime dateOfBirth, string passwordHash,
+        public User(string firstName, string lastName, string address, string email, DateTime dateOfBirth, string passwordHash,
         string phoneNumber, Gender gender, Guid bankId, Guid roleId)
         {
             BankId = bankId;
@@ -29,10 +30,26 @@ namespace BankingApp.Models.Entities
             Gender = gender;
             FirstName = firstName;
             LastName = lastName;
+            Address = address;
             Email = email;
             DateOfBirth = dateOfBirth;
             PasswordHash = passwordHash;
             PhoneNumber = phoneNumber;
+        }
+
+        public User(string firstName, string lastName, string address, string email, DateTime dateOfBirth, string passwordHash,
+        string phoneNumber, Gender gender, Guid bankId)
+        {
+            BankId = bankId;
+            Gender = gender;
+            FirstName = firstName;
+            LastName = lastName;
+            Address = address;
+            Email = email;
+            DateOfBirth = dateOfBirth;
+            PasswordHash = passwordHash;
+            PhoneNumber = phoneNumber;
+            DateCreated = DateTime.UtcNow;
         }
 
 

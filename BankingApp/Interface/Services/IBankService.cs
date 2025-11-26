@@ -11,6 +11,6 @@ namespace BankingApp.Interface.Services
         Task<BaseResponse<bool>> Delete(Guid id);
         Task<BaseResponse<BankDto>> GetBankByIdAsync(Guid id);
         Task<BaseResponse<List<BankDto>>> GetAllBanksAsync();
-        Task<BaseResponse<List<BankDto>>> ListOfBanksByBranchName(BankBranch bankBranch);
+        Task<BaseResponse<List<BankDto>>> ListOfBanksByBranchNameAsync(BankBranch bankBranch);
     }
 }

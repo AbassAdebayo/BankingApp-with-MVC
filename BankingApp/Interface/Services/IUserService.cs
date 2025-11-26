@@ -7,7 +7,10 @@ namespace BankingApp.Interface.Services
     {
         Task<BaseResponse<bool>> CreateAsync(CreateUserRequestModel request);
         //public Task<BaseResponse<LoginResponseModel>> LoginAsync(LoginRequestModel request, CancellationToken cancellationToken);
-        public Task<BaseResponse<UserDto>> GetUserByEmail(string email, CancellationToken cancellationToken);
-        public Task<BaseResponse<UserDto>> GetUserProfileByUserId(Guid userId, CancellationToken cancellationToken);
-        
+        public Task<BaseResponse<UserDto>> GetCustomerUserProfileByUserIdAsync(Guid userId, CancellationToken cancellationToken);
+
+        public Task<BaseResponse<IReadOnlyList<UserDto>>> ListOfCustomerUsersByBankAsync(string bankName, CancellationToken cancellationToken);
+        public Task<BaseResponse<IReadOnlyList<UserDto>>> GetAllCustomerUsersAsync(CancellationToken cancellationToken);
+
+    }
 }

@@ -29,6 +29,11 @@ namespace BankingApp.Models.DTOs.User.Validation
                 .LessThan(DateTime.Now).WithMessage("Date of birth must be in the past.");
             RuleFor(x => x.Gender)
                 .IsInEnum().WithMessage("Gender is required.");
+            RuleFor(x => x.AccountType)
+                .IsInEnum().WithMessage("Account type is required.");
+            RuleFor(x => x.Address)
+                .NotEmpty().WithMessage("Address is required.")
+                .MaximumLength(200).WithMessage("Address cannot exceed 200 characters.");
         }
     }
 }

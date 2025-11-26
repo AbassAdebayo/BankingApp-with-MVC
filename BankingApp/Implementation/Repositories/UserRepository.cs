@@ -42,6 +42,27 @@ namespace BankingApp.Implementation.Repositories
                 .SingleOrDefaultAsync();
         }
 
+        public Task<User> GetUserByEmail(string email)
+        {
+            return _bankContext.Set<User>()
+                .Where(u => u.Email == email)
+                .Include(u => u.Role)
+                .Include(u => u.Bank)
+                .Include(u => u.AccountDetails)
+                .AsNoTracking()
+                .SingleOrDefaultAsync();
+        }
+
+        public Task<User> GetUserProfile(Guid id)
+        {
+            return _bankContext.Set<User>()
+                .Where(u => u.Id == id)
+                .Include(u => u.Bank)
+                .Include(u => u.AccountDetails)
+                .AsNoTracking()
+                .SingleOrDefaultAsync();
+        }
+
         public async Task<List<User>> ListOfUsers()
         {
             return await _bankContext.Set<User>()
