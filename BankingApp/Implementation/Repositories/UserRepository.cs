@@ -72,15 +72,13 @@ namespace BankingApp.Implementation.Repositories
 
         public async Task<List<User>> ListOfUsersByBank(string bankName)
         {
-            var banksInUser = await _bankContext.Set<User>()
+            return await _bankContext.Set<User>()
+                .Where(u => u.Role.Name == "Customer" && u.Bank.Name == bankName)
                 .Include(u => u.Bank)
                 .ThenInclude(b => b.Name)
                 .AsNoTracking()
                 .ToListAsync();
-
-            return banksInUser
-                .Where(b => b.Bank.Name == bankName)
-                .ToList();
+               
 
         }
 
