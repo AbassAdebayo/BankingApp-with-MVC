@@ -11,7 +11,7 @@ namespace BankingApp.Models.DTOs.Bank
         public string Name { get; set; }
         public string? Description { get; set; }
         public BankBranch BankBranch { get; set; }
-        public ICollection<User> Users { get; set; } = [];
+        public ICollection<Entities.User> Users { get; set; } = [];
 
     }
 }

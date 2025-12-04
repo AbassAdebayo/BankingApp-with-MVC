@@ -1,10 +1,46 @@
+using BankingApp.Contracts.Service;
+using BankingApp.Identity;
+using BankingApp.Implementation.Repositories;
+using BankingApp.Implementation.Services;
+using BankingApp.Interface.Repositories;
+using BankingApp.Interface.Services;
+using BankingApp.Models.DTOs.Auth.Validation;
+using BankingApp.Models.DTOs.User;
+using BankingApp.Models.Entities;
 using BankingApp.Persistence.Context;
+using FluentValidation;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IBankRepository, BankRepository>()
+    .AddScoped<IBankService, BankService>()
+    .AddScoped<IUserRepository, UserRepository>()
+    .AddScoped<IUserService, UserService>();
+
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestValidation>();
+
+builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddScoped<IUserStore<User>, UserStore>();
+builder.Services.AddScoped<IRoleStore<Role>, RoleStore>();
+builder.Services.AddIdentity<User, Role>()
+    .AddDefaultTokenProviders();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(config =>
+    {
+        config.LoginPath = "/Auth/login";
+        config.Cookie.Name = "eBank";
+        config.LogoutPath = "/Auth/logout";
+        config.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+        config.SlidingExpiration = true;
+    });
+builder.Services.AddAuthorization();
 
 //Add Database
 builder.Services.AddDbContext<BankContext>(options =>
@@ -23,16 +59,22 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+if (builder.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
+app.UseStaticFiles();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=User}/{action=RegisterCustomer}/{id?}")
     .WithStaticAssets();
 
 

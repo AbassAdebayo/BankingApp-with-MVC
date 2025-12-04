@@ -26,7 +26,7 @@ namespace BankingApp.Controllers
         public async Task<IActionResult> RegisterCustomer()
         {
             var banks = await _bankService.GetAllBanksAsync();
-            ViewData["Banks"] = new MultiSelectList(banks.Data, "Id", "Name");
+            ViewData["Banks"] = new SelectList(banks.Data, "Id", "Name");
             return View();
         }
 
@@ -37,9 +37,18 @@ namespace BankingApp.Controllers
 
             if (user.Status)
             {
-                RedirectToAction("Index");
+                ViewBag.Alert = user.Status;
+                ViewBag.AlertType = "success";
+
+                return RedirectToAction("Index");
             }
-            return View();
+            else
+            {
+
+                ViewBag.Alert = user.Status;
+                ViewBag.AlertType = "danger";
+                return View();
+            }
         }
 
         [HttpGet]

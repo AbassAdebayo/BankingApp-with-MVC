@@ -36,9 +36,9 @@ namespace BankingApp.Implementation.Repositories
                 .FindAsync(id);
         }
 
-        public Task<List<Bank>> ListOfBanks()
+        public async Task<List<Bank>> ListOfBanks()
         {
-            return _bankContext.Set<Bank>()
+            return await _bankContext.Set<Bank>()
                 .AsNoTracking()
                 .ToListAsync();
         }

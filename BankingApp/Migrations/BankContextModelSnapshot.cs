@@ -35,6 +35,9 @@ namespace BankingApp.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<byte>("AccountType")
+                        .HasColumnType("tinyint unsigned");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime(6)");
 
@@ -56,7 +59,8 @@ namespace BankingApp.Migrations
                         {
                             Id = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e98c77e42"),
                             AccountNumber = "0234032001",
-                            DateCreated = new DateTime(2025, 11, 19, 18, 36, 11, 46, DateTimeKind.Utc).AddTicks(58),
+                            AccountType = (byte)0,
+                            DateCreated = new DateTime(2025, 12, 4, 17, 26, 28, 647, DateTimeKind.Utc).AddTicks(5561),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserId = new Guid("d2719e67-52f4-4f9c-bdb2-123456789abc")
                         });
@@ -77,6 +81,9 @@ namespace BankingApp.Migrations
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -90,7 +97,7 @@ namespace BankingApp.Migrations
                         {
                             Id = new Guid("d2719e67-52f4-4f9c-bdb2-225456789abc"),
                             BankBranch = 7,
-                            DateCreated = new DateTime(2025, 11, 19, 18, 36, 11, 45, DateTimeKind.Utc).AddTicks(7022),
+                            DateCreated = new DateTime(2025, 12, 4, 17, 26, 28, 647, DateTimeKind.Utc).AddTicks(1398),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "GTB"
                         });
@@ -123,7 +130,7 @@ namespace BankingApp.Migrations
                         new
                         {
                             Id = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e86897e42"),
-                            DateCreated = new DateTime(2025, 11, 19, 18, 36, 10, 884, DateTimeKind.Utc).AddTicks(1389),
+                            DateCreated = new DateTime(2025, 12, 4, 17, 26, 28, 496, DateTimeKind.Utc).AddTicks(6749),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Has full permissions",
                             Name = "Admin"
@@ -142,6 +149,10 @@ namespace BankingApp.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<Guid>("BankId")
                         .HasColumnType("char(36)");
@@ -193,15 +204,16 @@ namespace BankingApp.Migrations
                         new
                         {
                             Id = new Guid("d2719e67-52f4-4f9c-bdb2-123456789abc"),
+                            Address = "123 Admin Street, City, Country",
                             BankId = new Guid("d2719e67-52f4-4f9c-bdb2-225456789abc"),
-                            DateCreated = new DateTime(2025, 11, 19, 18, 36, 11, 46, DateTimeKind.Utc).AddTicks(9122),
+                            DateCreated = new DateTime(2025, 12, 4, 17, 26, 28, 648, DateTimeKind.Utc).AddTicks(5996),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateOfBirth = new DateTime(1990, 11, 10, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin001@gmail.com",
                             FirstName = "Admin",
                             Gender = (byte)1,
                             LastName = "Manager",
-                            PasswordHash = "AQAAAAIAAYagAAAAEA882fWHM9TCRPhDrZ333KhcQn4XNLlpmYnbnr0yuVb21I2M+tGqCJA0K5ZEICt92w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECpGX55PNjk77hOOOmTyw9SwxVZKlP77g//ZkVnvZA+NVo0310zxzz4B1Mj8ZYy3QQ==",
                             PhoneNumber = "09055123478",
                             RoleId = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e86897e42")
                         });

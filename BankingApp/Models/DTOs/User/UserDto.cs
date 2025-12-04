@@ -11,7 +11,7 @@ namespace BankingApp.Models.DTOs.User
         public DateTime DateModified { get; set; }
         public Guid BankId { get; set; }
         public Guid RoleId { get; set; }
-        public Role Role { get; set; }
+        public Entities.Role Role { get; set; }
         public string Address { get; set; }
         public Gender Gender { get; set; }
         public BankDto Bank { get; set; }

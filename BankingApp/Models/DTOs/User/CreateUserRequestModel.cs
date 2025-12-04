@@ -5,7 +5,6 @@ namespace BankingApp.Models.DTOs.User
 {
     public class CreateUserRequestModel
     {
-        public Guid RoleId { get; set; }
         public Guid BankId { get; set; }
         public Gender Gender { get; set; }
         public required string FirstName { get; set; }

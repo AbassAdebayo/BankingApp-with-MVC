@@ -97,6 +97,7 @@ namespace BankingApp.Implementation.Services
                 {
                     Id = b.Id,
                     Name = b.Name,
+                    Description = b.Description,
                     BankBranch = b.BankBranch,
                     DateCreated = b.DateCreated,
                 }).ToList()
