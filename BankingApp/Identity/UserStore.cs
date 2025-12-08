@@ -146,7 +146,8 @@ namespace BankingApp.Identity
             return Task.FromResult(true);
         }
 
-        public async Task<IList<string>> GetRoleAsync(User user, CancellationToken cancellationToken)
+
+        public async Task<IList<string>> GetRolesAsync(User user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null)
@@ -158,11 +159,6 @@ namespace BankingApp.Identity
                 .Select(r => r.Role.Name)
                 .ToListAsync(cancellationToken: cancellationToken);
             return roles;
-        }
-
-        public Task<IList<string>> GetRolesAsync(User user, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
 
         public Task<string> GetUserIdAsync(User user, CancellationToken cancellationToken)

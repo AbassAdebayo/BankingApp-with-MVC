@@ -28,6 +28,12 @@ namespace BankingApp.Implementation.Repositories
 
         }
 
+        public async Task<bool> ExistsByBank(string email, string bankName)
+        {
+            return await _bankContext.Set<User>()
+                .AnyAsync(u => u.Email == email && u.Bank.Name == bankName);
+        }
+
         public async Task<User> GetById(Guid id)
         {
             return await _bankContext.Set<User>().FindAsync(id);
@@ -42,20 +48,20 @@ namespace BankingApp.Implementation.Repositories
                 .SingleOrDefaultAsync();
         }
 
-        public Task<User> GetUserByEmail(string email)
+        public async Task<User> GetUserByEmail(string email)
         {
-            return _bankContext.Set<User>()
-                .Where(u => u.Email == email)
-                .Include(u => u.Role)
-                .Include(u => u.Bank)
+            return await _bankContext.Set<User>()
+               .Where(u => u.Email == email)
+               .AsNoTracking()
+               .Include(u => u.Role)
+               .Include(u => u.Bank)
                 .Include(u => u.AccountDetails)
-                .AsNoTracking()
-                .SingleOrDefaultAsync();
+               .SingleOrDefaultAsync();
         }
 
-        public Task<User> GetUserProfile(Guid id)
+        public async Task<User> GetUserProfile(Guid id)
         {
-            return _bankContext.Set<User>()
+            return await _bankContext.Set<User>()
                 .Where(u => u.Id == id)
                 .Include(u => u.Bank)
                 .Include(u => u.AccountDetails)

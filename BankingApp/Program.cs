@@ -17,9 +17,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddScoped<IBankRepository, BankRepository>()
+    .AddScoped<IRoleRepository, RoleRepository>()
     .AddScoped<IBankService, BankService>()
     .AddScoped<IUserRepository, UserRepository>()
-    .AddScoped<IUserService, UserService>();
+    .AddScoped<IUserService, UserService>().
+    AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddControllersWithViews();
 

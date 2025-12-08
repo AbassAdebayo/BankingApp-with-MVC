@@ -40,7 +40,7 @@ namespace BankingApp.Controllers
                 ViewBag.Alert = user.Status;
                 ViewBag.AlertType = "success";
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Login", "Auth");
             }
             else
             {

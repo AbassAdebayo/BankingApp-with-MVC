@@ -29,6 +29,24 @@
 </head>
 
 <body class="bg-white">
+    @if (!string.IsNullOrEmpty(ViewBag.Alert as string))
+    {
+        <div id="responseAlert" class="alert alert-@ViewBag.AlertType text-center" role="alert">
+            @ViewBag.Alert
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                setTimeout(() => {
+                    const alert = document.getElementById('responseAlert');
+                    if (alert) {
+                        alert.style.transition = "opacity 0.6s ease";
+                        alert.style.opacity = 0;
+                        setTimeout(() => alert.remove(), 600);
+                    }
+                }, 4000);
+            });
+        </script>
+    }
     <!-- begin app -->
     <div class="app">
         <!-- begin app-wrap -->
@@ -44,24 +62,6 @@
             <!-- end pre-loader -->
             <!--start login contant-->
             <div class="container mt-4">
-                @if (!string.IsNullOrEmpty(ViewBag.Alert as string))
-                {
-                    <div id="responseAlert" class="alert alert-@ViewBag.AlertType text-center" role="alert">
-                        @ViewBag.Alert
-                    </div>
-                    <script>
-                        document.addEventListener("DOMContentLoaded", () => {
-                            setTimeout(() => {
-                                const alert = document.getElementById('responseAlert');
-                                if (alert) {
-                                    alert.style.transition = "opacity 0.6s ease";
-                                    alert.style.opacity = 0;
-                                    setTimeout(() => alert.remove(), 600);
-                                }
-                            }, 4000);
-                        });
-                    </script>
-                }
             </div>
             <div class="app-contant">
                 <div class="bg-white">
@@ -70,9 +70,9 @@
                             <div class="col-12 col-md-6 col-lg-5 col-xxl-3  align-self-center order-2 order-sm-1">
                                 <div class="d-flex align-items-center h-100-vh">
                                     <div class="register p-5">
-                                        <h1 class="mb-2">E-Bankingr</h1>
+                                        <h1 class="mb-2">E-Banking</h1>
                                         <p>Welcome, Please create your account.</p>
-                                        <form asp-action="RegsiterCustomer" asp-controller="User" class="mt-2 mt-sm-5">
+                                        <form asp-action="RegisterCustomer" asp-controller="User" class="mt-2 mt-sm-5">
                                             <div class="row">
                                                 <div class="col-12 col-sm-6">
                                                     <div class="form-group">
@@ -126,32 +126,28 @@
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label class="control-label">Confirm Password</label>
-                                                        <input type="password" asp-for="ConfirmPassword" class="form-control" required/>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12">
-                                                    <label for="bank-type">Banks</label>
-                                                    <select asp-for="BankId" asp-items="ViewBag.Banks" id="bank-type"></select>
-
-                                                    <div class="custom-multiselect" data-target="#bank-type">
-                                                        <div class="cm-selected" tabindex="0">
-                                                            <div class="cm-tags"></div>
-                                                            <input type="text" class="cm-search" placeholder="Search or type to add..." />
-                                                            <div class="cm-caret">▾</div>
-                                                        </div>
-                                                        <div class="cm-dropdown">
-                                                            <div class="cm-options"></div>
-                                                        </div>
+                                                        <input type="password" id="password-confirm" asp-for="ConfirmPassword" class="form-control" required/>
                                                     </div>
                                                 </div>
 
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Account Type</label>
-                                                        <select asp-for="AccountType" asp-items="@Html.GetEnumSelectList(typeof(AccountType))" class="form-control" required>
-                                                        </select>
-                                                    </div>
+                                                <div class="col-12 mb-3">
+                                                    <label class="form-label fw-semibold">Banks</label>
+                                                    <select asp-for="BankId" asp-items="ViewBag.Banks"
+                                                            id="bank-type"
+                                                            class="form-select select2"
+                                                            required>
+                                                    </select>
                                                 </div>
+
+                                                <div class="col-12 mb-3">
+                                                    <label class="form-label fw-semibold">Account Type</label>
+                                                    <select asp-for="AccountType" asp-items="@Html.GetEnumSelectList(typeof(AccountType))"
+                                                            class="form-select select2"
+                                                            required>
+                                                    </select>
+                                                </div>
+
+
                                                 <div class="col-12">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" id="gridCheck">
@@ -161,10 +157,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12 mt-3">
-                                                    <button type="submit" class="btn btn-primary text-uppercase">Sign up</button>
+                                                    <button type="submit" class="btn btn-primary text-uppercase">Sign Up</button>
                                                 </div>
                                                 <div class="col-12  mt-3">
-                                                    <p>Already have an account ?<a href="auth-login.html"> Sign In</a></p>
+                                                    <p>Already have an account?<a asp-controller="Auth" asp-action="Login"> Sign In</a></p>
                                                 </div>
                                             </div>
                                         </form>
@@ -191,6 +187,15 @@
 
     <!-- custom app -->
     <script src="assets/js/app.js"></script>
+
+    <script>
+        $('.select2').select2({
+        placeholder: "Select an option",
+        allowClear: true,
+        width: '100%'
+        });
+    </script>
+
 
     <style>
         .register {

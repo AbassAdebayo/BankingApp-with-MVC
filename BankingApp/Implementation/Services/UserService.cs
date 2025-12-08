@@ -11,18 +11,31 @@ namespace BankingApp.Implementation.Services
 {
     public class UserService(IUserRepository userRepository, ILogger<UserService> logger,
         UserManager<User> userManager,
-            IIdentityService identityService, IBankRepository bankRepository) : IUserService
+            IIdentityService identityService, 
+            IRoleRepository roleRepository, IBankRepository bankRepository) : IUserService
     {
         private readonly IUserRepository _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         private readonly ILogger<UserService> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         private readonly UserManager<User> _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         private readonly IIdentityService _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         private readonly IBankRepository _bankRepository = bankRepository ?? throw new ArgumentNullException(nameof(bankRepository));
+        private readonly IRoleRepository _roleRepository = roleRepository ?? throw new ArgumentNullException(nameof(roleRepository));
 
         public async Task<BaseResponse<bool>> CreateAsync(CreateUserRequestModel request)
         {
             var bank = await _bankRepository.GetById(request.BankId);
-            var userExists = await _userRepository.Any(u => u.Email == request.Email && u.Bank.Name == bank.Name);
+            var userExists = await _userRepository.ExistsByBank(request.Email, bank.Name);
+
+            var customerRole = await _roleRepository.GetRoleByName("Customer");
+            if(customerRole is null)
+            {
+                _logger.LogError($"Role doesn't exist.");
+                return new BaseResponse<bool>
+                {
+                    Message = $"Role doesn't exist.",
+                    Status = false
+                };
+            }
             if (userExists)
             {
                 _logger.LogError($"User with email already has account with {bank.Name}");
@@ -54,7 +67,8 @@ namespace BankingApp.Implementation.Services
                     hashPassword,
                     request.PhoneNumber,
                     request.Gender,
-                    request.BankId
+                    request.BankId,
+                    customerRole.Id 
 
 
                 );
@@ -72,12 +86,6 @@ namespace BankingApp.Implementation.Services
                 throw new Exception("User creation failed: " + string.Join(", ", adduserAccountResult.Errors.Select(e => e.Description)));
             }
 
-            var addUserToRoleResult = await _userManager.AddToRoleAsync(user, "Customer");
-
-            if (!addUserToRoleResult.Succeeded)
-            {
-                throw new Exception("Adding roles failed: " + string.Join(", ", addUserToRoleResult.Errors.Select(e => e.Description)));
-            }
 
             return new BaseResponse<bool>
             {

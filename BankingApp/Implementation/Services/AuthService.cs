@@ -17,7 +17,7 @@ namespace BankingApp.Implementation.Services
         private readonly ILogger<UserService> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         public async Task<BaseResponse<LoginResponseModel>> LoginAsync(LoginRequestModel request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetUserByEmail(request.Email);
+            var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
                 _logger.LogError("Invalid credentials");

@@ -13,6 +13,7 @@ namespace BankingApp.Interface.Repositories
         Task<List<User>> ListOfUsers();
         Task<List<User>> ListOfUsersByBank(string bankName);
         Task<bool> Any(Func<User, bool> expression);
+        Task<bool> ExistsByBank(string email, string bankName);
         Task<User> GetUserByEmail(string email);
     }
 }
