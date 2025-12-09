@@ -16,8 +16,11 @@ namespace BankingApp.Controllers
             return View();
         }
 
+        [HttpGet]
         public IActionResult CustomerDashBoard()
         {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdString == null) return RedirectToAction("Login");
             return View();
         }
 
@@ -58,14 +61,27 @@ namespace BankingApp.Controllers
 
                 if (checkRole == "Customer")
                 {
-                    return RedirectToAction("CustomerDashBoard", "Auth");
+                    return RedirectToAction("CustomerDashBoard");
                 }
-                return RedirectToAction("AdminDashBoard", "Auth");
+
+                return RedirectToAction("AdminDashBoard");
 
             }
 
             ModelState.AddModelError(string.Empty, loginResponse.Message);
             return View(model);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            HttpContext.Session.Clear();
+            HttpContext.Session.Remove("UserId");
+
+            Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+            Response.Headers["Pragma"] = "no-cache";
+            Response.Headers["Expires"] = "0";
+            return RedirectToAction("Login");
         }
     }
 }

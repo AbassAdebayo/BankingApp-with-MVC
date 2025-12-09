@@ -32,13 +32,20 @@ builder.Services.AddScoped<IUserStore<User>, UserStore>();
 builder.Services.AddScoped<IRoleStore<Role>, RoleStore>();
 builder.Services.AddIdentity<User, Role>()
     .AddDefaultTokenProviders();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
+.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(15);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(config =>
     {
         config.LoginPath = "/Auth/login";
         config.Cookie.Name = "eBank";
         config.LogoutPath = "/Auth/logout";
+        config.AccessDeniedPath = "/User/Login";
         config.ExpireTimeSpan = TimeSpan.FromMinutes(15);
         config.SlidingExpiration = true;
     });
@@ -69,6 +76,7 @@ if (builder.Environment.IsDevelopment())
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
