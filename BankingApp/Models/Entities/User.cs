@@ -12,6 +12,7 @@ namespace BankingApp.Models.Entities
         public Gender Gender { get; set; }
         public Bank Bank { get; set; }
         public AccountDetails AccountDetails { get; set; }
+        public CardInformation CardInformation { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }

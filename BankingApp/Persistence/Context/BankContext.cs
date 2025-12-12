@@ -15,6 +15,11 @@ namespace BankingApp.Persistence.Context
                 .WithOne(ac => ac.User)
                 .HasForeignKey<AccountDetails>(ac => ac.UserId);
 
+            builder.Entity<User>()
+                .HasOne(u => u.CardInformation)
+                .WithOne(ci => ci.User)
+                .HasForeignKey<CardInformation>(ci => ci.UserId);
+
             SeedAdminData(builder);
             SeedRoleData(builder);
 
@@ -57,8 +62,15 @@ namespace BankingApp.Persistence.Context
                 DateCreated = DateTime.UtcNow,
                 Id = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e98c77e42"),
                 UserId = adminUserId,
-                
+
             };
+
+            var adminCardInformation = new CardInformation(adminUserId, $"{firstName} {lastName}", "2345 6780 0877 9997", "179", "12 /29", "GTB")
+            {
+                DateCreated = DateTime.UtcNow,
+                Id = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e98c77e67")
+            };
+
             var adminUser = new User
                 (
                     firstName,
@@ -87,6 +99,7 @@ namespace BankingApp.Persistence.Context
             modelBuilder.Entity<Bank>().HasData(bank);
             modelBuilder.Entity<User>().HasData(adminUser);
             modelBuilder.Entity<AccountDetails>().HasData(adminAccountDetails);
+            modelBuilder.Entity<CardInformation>().HasData(adminCardInformation);
 
         }
 
@@ -105,6 +118,7 @@ namespace BankingApp.Persistence.Context
         }
 
         DbSet<AccountDetails> AccountDetails => Set<AccountDetails>();
+        DbSet<CardInformation> CardInformations => Set<CardInformation>();
         DbSet<Bank> Banks => Set<Bank>();
         DbSet<User> Users => Set<User>();
     }

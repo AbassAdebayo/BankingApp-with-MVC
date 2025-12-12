@@ -1,4 +1,5 @@
 ﻿using BankingApp.Models.DTOs.Role;
+using BankingApp.Models.Enum;
 
 namespace BankingApp.Models.DTOs.Auth
 {
@@ -15,6 +16,7 @@ namespace BankingApp.Models.DTOs.Auth
         public string FullName { get; set; }
         public Guid UserId { get; set; }
         public string Email { get; set; }
+        public Gender Gender { get; set; }
         public RoleDto Role { get; set; } = new RoleDto();
     }
 }

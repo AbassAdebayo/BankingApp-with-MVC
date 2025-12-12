@@ -47,6 +47,7 @@ namespace BankingApp.Implementation.Services
 
                     UserId = user.Id,
                     Email = user.Email,
+                    Gender = user.Gender,
                     Role = roles.Select(r => new RoleDto { Name = r }).FirstOrDefault() ?? new RoleDto(),
                     FirstName =  $"{user.FirstName}" ?? string.Empty,
                     FullName = $"{user.FirstName} {user.LastName}" ?? string.Empty

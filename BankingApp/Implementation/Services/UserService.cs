@@ -11,7 +11,7 @@ namespace BankingApp.Implementation.Services
 {
     public class UserService(IUserRepository userRepository, ILogger<UserService> logger,
         UserManager<User> userManager,
-            IIdentityService identityService, 
+            IIdentityService identityService,
             IRoleRepository roleRepository, IBankRepository bankRepository) : IUserService
     {
         private readonly IUserRepository _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
@@ -27,7 +27,7 @@ namespace BankingApp.Implementation.Services
             var userExists = await _userRepository.ExistsByBank(request.Email, bank.Name);
 
             var customerRole = await _roleRepository.GetRoleByName("Customer");
-            if(customerRole is null)
+            if (customerRole is null)
             {
                 _logger.LogError($"Role doesn't exist.");
                 return new BaseResponse<bool>
@@ -68,15 +68,21 @@ namespace BankingApp.Implementation.Services
                     request.PhoneNumber,
                     request.Gender,
                     request.BankId,
-                    customerRole.Id 
+                    customerRole.Id
 
 
                 );
             var accountNumber = GenerateAccountNumber();
             user.AccountDetails = new AccountDetails(accountNumber, request.AccountType)
-            { 
-                AccountBalance = 500m, 
+            {
+                AccountBalance = 500m,
             };
+
+            var cardHolder = $"{user.FirstName} {user.LastName}";
+            var cardNumber = GenerateCardNumber();
+            var cardCVV = GenerateCVV();
+            var expiry = GenerateExpiry();
+            user.CardInformation = new CardInformation(cardHolder, cardNumber, cardCVV, expiry, bank.Name);
 
             var adduserAccountResult = await _userManager.CreateAsync(user);
 
@@ -161,12 +167,12 @@ namespace BankingApp.Implementation.Services
                 Status = true,
                 Data = customers.Select(c => new UserDto
                 {
-                   Id = c.Id,
-                   FirstName = c.FirstName,
-                   LastName = c.LastName,
-                   PhoneNumber = c.PhoneNumber,
+                    Id = c.Id,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    PhoneNumber = c.PhoneNumber,
                 }).ToList(),
-                
+
             };
         }
 
@@ -198,6 +204,70 @@ namespace BankingApp.Implementation.Services
             };
         }
 
+        public async Task<BaseResponse<CardInformationDto>> GetUserATMCardAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            var user = await _userRepository.GetById(userId);
+            if (user == null)
+            {
+                return new BaseResponse<CardInformationDto>
+                {
+                    Message = "User cannot be found",
+                    Status = false
+                };
+            }
+
+            var userCard = await _userRepository.GetUserATMCard(user.Id);
+
+            if (userCard == null)
+            {
+                return new BaseResponse<CardInformationDto>
+                {
+                    Message = "ATM Card for this user cannot be found",
+                    Status = false
+                };
+            }
+
+            return new BaseResponse<CardInformationDto>
+            {
+                Message = "ATM card for user retrieved",
+                Status = true,
+                Data = new CardInformationDto
+                {
+                    BankName = userCard.BankName,
+                    CardCVV = userCard.CardCVV,
+                    CardHolder = userCard.CardHolder.ToUpper(),
+                    CardNumber = userCard.CardNumber,
+                    Expiry = userCard.Expiry
+                }
+            };
+        }
+
+        private static string GenerateCardNumber()
+        {
+            string cardNumber = "";
+            Random random = new Random();
+            for (int i = 0; i < 16; i++)
+            {
+                cardNumber += random.Next(0, 9);
+                if ((i + 1) % 4 == 0 && i != 15) cardNumber += " ";
+            }
+            return cardNumber;
+        }
+
+        private static string GenerateExpiry()
+        {
+            DateTime now = DateTime.UtcNow;
+            int month = now.Month;
+            int expYear = now.Year + 4;
+
+            return $"{month:00}/{expYear % 100:00}";
+        }
+
+        private static string GenerateCVV()
+        {
+            Random random = new Random();
+            return random.Next(100, 999).ToString();
+        }
         private static string GenerateAccountNumber()
         {
             Random random = new Random();
@@ -208,6 +278,8 @@ namespace BankingApp.Implementation.Services
             }
             return accountNumber;
         }
+
+
         private static (bool, string?) ValidatePassword(string password)
         {
             // Minimum length of password

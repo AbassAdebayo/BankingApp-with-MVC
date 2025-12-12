@@ -17,7 +17,7 @@ namespace BankingApp.Implementation.Repositories
 
         public async Task<bool> Any(Func<User, bool> expression)
         {
-           return await _bankContext.Set<User>().AnyAsync(u => expression(u));
+            return await _bankContext.Set<User>().AnyAsync(u => expression(u));
         }
 
         public async Task<bool> Delete(User user)
@@ -44,6 +44,14 @@ namespace BankingApp.Implementation.Repositories
             return await _bankContext.Set<User>()
                 .Where(u => u.Id == userId)
                 .Include(u => u.Role)
+                .AsNoTracking()
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task<CardInformation> GetUserATMCard(Guid userId)
+        {
+            return await _bankContext.Set<CardInformation>()
+                .Where(ci => ci.UserId == userId)
                 .AsNoTracking()
                 .SingleOrDefaultAsync();
         }
@@ -84,7 +92,7 @@ namespace BankingApp.Implementation.Repositories
                 .ThenInclude(b => b.Name)
                 .AsNoTracking()
                 .ToListAsync();
-               
+
 
         }
 

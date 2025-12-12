@@ -48,6 +48,7 @@ namespace BankingApp.Controllers
                     new Claim(ClaimTypes.Name, loginResponse.Data.FirstName),
                     new Claim(ClaimTypes.GivenName, loginResponse.Data.FullName),
                     new Claim(ClaimTypes.Email, loginResponse.Data.Email),
+                    new Claim(ClaimTypes.Gender, loginResponse.Data.Gender.ToString()),
                     new Claim(ClaimTypes.NameIdentifier, loginResponse.Data.UserId.ToString()),
                 };
 

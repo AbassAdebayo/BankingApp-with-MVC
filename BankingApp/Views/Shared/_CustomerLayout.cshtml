@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Security.Claims
+@{
     Layout = null;
 }
 
@@ -309,9 +310,19 @@
                                             </div>
                                         </div>
                                         <div class="p-4">
-                                            <a class="dropdown-item d-flex nav-link" href="javascript:void(0)">
-                                                <i class="fa fa-user pr-2 text-success"></i> Profile
-                                            </a>
+                                            @if (User.FindFirstValue(ClaimTypes.NameIdentifier) != null)
+                                            {
+                                                <a class="dropdown-item d-flex nav-link" asp-action="CustomerProfile" asp-controller="User">
+                                                    <i class="fa fa-user pr-2 text-success"></i> Profile
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="dropdown-item d-flex nav-link" href="#">
+                                                    <i class="fa fa-user pr-2 text-success"></i> Profile
+                                                </a>
+
+                                            }
                                             <a class="dropdown-item d-flex nav-link" href="javascript:void(0)">
                                                 <i class="fa fa-envelope pr-2 text-primary"></i> Inbox
                                                 <span class="badge badge-primary ml-auto">6</span>
@@ -581,7 +592,7 @@
                                         <a href="javascript:void(0);" class="tooltip-wrapper" data-toggle="tooltip" data-placement="top" title="" data-original-title="Todo list">
                                             <i class="fe fe-edit btn btn-icon text-primary"></i>
                                         </a>
-                                        <a href="javascript:void(0);" class="tooltip-wrapper" data-toggle="tooltip" data-placement="top" title="" data-original-title="Projects">
+                                        <a asp-action="RetrieveUserATMCard" asp-controller="User" class="tooltip-wrapper" data-toggle="tooltip" data-placement="top" title="" data-original-title="My ATM Card">
                                             <i class="fa fa-lightbulb-o btn btn-icon text-success"></i>
                                         </a>
                                         <a href="javascript:void(0);" class="tooltip-wrapper" data-toggle="tooltip" data-placement="top" title="" data-original-title="Task">

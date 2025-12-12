@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingApp.Migrations
 {
     [DbContext(typeof(BankContext))]
-    [Migration("20251204172630_first")]
+    [Migration("20251212165150_first")]
     partial class first
     {
         /// <inheritdoc />
@@ -63,7 +63,7 @@ namespace BankingApp.Migrations
                             Id = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e98c77e42"),
                             AccountNumber = "0234032001",
                             AccountType = (byte)0,
-                            DateCreated = new DateTime(2025, 12, 4, 17, 26, 28, 647, DateTimeKind.Utc).AddTicks(5561),
+                            DateCreated = new DateTime(2025, 12, 12, 16, 51, 48, 988, DateTimeKind.Utc).AddTicks(2822),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserId = new Guid("d2719e67-52f4-4f9c-bdb2-123456789abc")
                         });
@@ -100,9 +100,66 @@ namespace BankingApp.Migrations
                         {
                             Id = new Guid("d2719e67-52f4-4f9c-bdb2-225456789abc"),
                             BankBranch = 7,
-                            DateCreated = new DateTime(2025, 12, 4, 17, 26, 28, 647, DateTimeKind.Utc).AddTicks(1398),
+                            DateCreated = new DateTime(2025, 12, 12, 16, 51, 48, 987, DateTimeKind.Utc).AddTicks(8556),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "GTB"
+                        });
+                });
+
+            modelBuilder.Entity("BankingApp.Models.Entities.CardInformation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("BankName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CardCVV")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CardHolder")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CardNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Expiry")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("CardInformations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e98c77e67"),
+                            BankName = "GTB",
+                            CardCVV = "179",
+                            CardHolder = "Admin Manager",
+                            CardNumber = "2345 6780 0877 9997",
+                            DateCreated = new DateTime(2025, 12, 12, 16, 51, 48, 989, DateTimeKind.Utc).AddTicks(143),
+                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Expiry = "12 /29",
+                            UserId = new Guid("d2719e67-52f4-4f9c-bdb2-123456789abc")
                         });
                 });
 
@@ -133,7 +190,7 @@ namespace BankingApp.Migrations
                         new
                         {
                             Id = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e86897e42"),
-                            DateCreated = new DateTime(2025, 12, 4, 17, 26, 28, 496, DateTimeKind.Utc).AddTicks(6749),
+                            DateCreated = new DateTime(2025, 12, 12, 16, 51, 48, 850, DateTimeKind.Utc).AddTicks(2195),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Has full permissions",
                             Name = "Admin"
@@ -209,14 +266,14 @@ namespace BankingApp.Migrations
                             Id = new Guid("d2719e67-52f4-4f9c-bdb2-123456789abc"),
                             Address = "123 Admin Street, City, Country",
                             BankId = new Guid("d2719e67-52f4-4f9c-bdb2-225456789abc"),
-                            DateCreated = new DateTime(2025, 12, 4, 17, 26, 28, 648, DateTimeKind.Utc).AddTicks(5996),
+                            DateCreated = new DateTime(2025, 12, 12, 16, 51, 48, 990, DateTimeKind.Utc).AddTicks(689),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateOfBirth = new DateTime(1990, 11, 10, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin001@gmail.com",
                             FirstName = "Admin",
                             Gender = (byte)1,
                             LastName = "Manager",
-                            PasswordHash = "AQAAAAIAAYagAAAAECpGX55PNjk77hOOOmTyw9SwxVZKlP77g//ZkVnvZA+NVo0310zxzz4B1Mj8ZYy3QQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBoV3tROqEsbdYxd42dCOu9rpVsnNRHBc94ugpmrSjZfpljNbFVbwH8hjHl2nzgBGg==",
                             PhoneNumber = "09055123478",
                             RoleId = new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e86897e42")
                         });
@@ -227,6 +284,17 @@ namespace BankingApp.Migrations
                     b.HasOne("BankingApp.Models.Entities.User", "User")
                         .WithOne("AccountDetails")
                         .HasForeignKey("BankingApp.Models.Entities.AccountDetails", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BankingApp.Models.Entities.CardInformation", b =>
+                {
+                    b.HasOne("BankingApp.Models.Entities.User", "User")
+                        .WithOne("CardInformation")
+                        .HasForeignKey("BankingApp.Models.Entities.CardInformation", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -260,6 +328,9 @@ namespace BankingApp.Migrations
             modelBuilder.Entity("BankingApp.Models.Entities.User", b =>
                 {
                     b.Navigation("AccountDetails")
+                        .IsRequired();
+
+                    b.Navigation("CardInformation")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

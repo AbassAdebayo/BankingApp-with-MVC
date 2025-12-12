@@ -120,33 +120,75 @@ namespace BankingApp.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "CardInformations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CardHolder = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CardNumber = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Expiry = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    BankName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CardCVV = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DateCreated = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DateModified = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CardInformations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CardInformations_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.InsertData(
                 table: "Banks",
                 columns: new[] { "Id", "BankBranch", "DateCreated", "DateModified", "Description", "Name" },
-                values: new object[] { new Guid("d2719e67-52f4-4f9c-bdb2-225456789abc"), 7, new DateTime(2025, 12, 4, 17, 26, 28, 647, DateTimeKind.Utc).AddTicks(1398), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "GTB" });
+                values: new object[] { new Guid("d2719e67-52f4-4f9c-bdb2-225456789abc"), 7, new DateTime(2025, 12, 12, 16, 51, 48, 987, DateTimeKind.Utc).AddTicks(8556), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "GTB" });
 
             migrationBuilder.InsertData(
                 table: "Role",
                 columns: new[] { "Id", "DateCreated", "DateModified", "Description", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e86897e42"), new DateTime(2025, 12, 4, 17, 26, 28, 496, DateTimeKind.Utc).AddTicks(6749), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Has full permissions", "Admin" },
+                    { new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e86897e42"), new DateTime(2025, 12, 12, 16, 51, 48, 850, DateTimeKind.Utc).AddTicks(2195), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Has full permissions", "Admin" },
                     { new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e86c77e76"), new DateTime(2025, 11, 10, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Customer" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Address", "BankId", "DateCreated", "DateModified", "DateOfBirth", "Email", "FirstName", "Gender", "LastName", "PasswordHash", "PhoneNumber", "RoleId" },
-                values: new object[] { new Guid("d2719e67-52f4-4f9c-bdb2-123456789abc"), "123 Admin Street, City, Country", new Guid("d2719e67-52f4-4f9c-bdb2-225456789abc"), new DateTime(2025, 12, 4, 17, 26, 28, 648, DateTimeKind.Utc).AddTicks(5996), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1990, 11, 10, 0, 0, 0, 0, DateTimeKind.Utc), "admin001@gmail.com", "Admin", (byte)1, "Manager", "AQAAAAIAAYagAAAAECpGX55PNjk77hOOOmTyw9SwxVZKlP77g//ZkVnvZA+NVo0310zxzz4B1Mj8ZYy3QQ==", "09055123478", new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e86897e42") });
+                values: new object[] { new Guid("d2719e67-52f4-4f9c-bdb2-123456789abc"), "123 Admin Street, City, Country", new Guid("d2719e67-52f4-4f9c-bdb2-225456789abc"), new DateTime(2025, 12, 12, 16, 51, 48, 990, DateTimeKind.Utc).AddTicks(689), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1990, 11, 10, 0, 0, 0, 0, DateTimeKind.Utc), "admin001@gmail.com", "Admin", (byte)1, "Manager", "AQAAAAIAAYagAAAAEBoV3tROqEsbdYxd42dCOu9rpVsnNRHBc94ugpmrSjZfpljNbFVbwH8hjHl2nzgBGg==", "09055123478", new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e86897e42") });
 
             migrationBuilder.InsertData(
                 table: "AccountDetails",
                 columns: new[] { "Id", "AccountBalance", "AccountNumber", "AccountType", "DateCreated", "DateModified", "UserId" },
-                values: new object[] { new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e98c77e42"), null, "0234032001", (byte)0, new DateTime(2025, 12, 4, 17, 26, 28, 647, DateTimeKind.Utc).AddTicks(5561), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("d2719e67-52f4-4f9c-bdb2-123456789abc") });
+                values: new object[] { new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e98c77e42"), null, "0234032001", (byte)0, new DateTime(2025, 12, 12, 16, 51, 48, 988, DateTimeKind.Utc).AddTicks(2822), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("d2719e67-52f4-4f9c-bdb2-123456789abc") });
+
+            migrationBuilder.InsertData(
+                table: "CardInformations",
+                columns: new[] { "Id", "BankName", "CardCVV", "CardHolder", "CardNumber", "DateCreated", "DateModified", "Expiry", "UserId" },
+                values: new object[] { new Guid("c8f2e5ab-9f34-4b97-8b7c-1a5e98c77e67"), "GTB", "179", "Admin Manager", "2345 6780 0877 9997", new DateTime(2025, 12, 12, 16, 51, 48, 989, DateTimeKind.Utc).AddTicks(143), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "12 /29", new Guid("d2719e67-52f4-4f9c-bdb2-123456789abc") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AccountDetails_UserId",
                 table: "AccountDetails",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CardInformations_UserId",
+                table: "CardInformations",
                 column: "UserId",
                 unique: true);
 
@@ -166,6 +208,9 @@ namespace BankingApp.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AccountDetails");
+
+            migrationBuilder.DropTable(
+                name: "CardInformations");
 
             migrationBuilder.DropTable(
                 name: "Users");

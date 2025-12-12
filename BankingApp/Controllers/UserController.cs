@@ -1,11 +1,8 @@
-﻿using BankingApp.Interface.Repositories;
-using BankingApp.Interface.Services;
+﻿using BankingApp.Interface.Services;
 using BankingApp.Models.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Numerics;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace BankingApp.Controllers
 {
@@ -52,11 +49,43 @@ namespace BankingApp.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> RetrieveUserATMCard()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            if (!Guid.TryParse(userIdString, out var userId))
+            {
+                return BadRequest("Invalid user ID format.");
+            }
+
+            var userCard = await _userService.GetUserATMCardAsync(userId, CancellationToken.None);
+
+            if (userCard.Status)
+            {
+                ViewBag.Alert = userCard.Status;
+                ViewBag.AlertType = "success";
+
+                return View(userCard);
+            }
+            else
+            {
+
+                ViewBag.Alert = userCard.Status;
+                ViewBag.AlertType = "danger";
+                return View();
+            }
+        }
+
+        [HttpGet]
         public async Task<IActionResult> CustomerProfile()
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if(string.IsNullOrEmpty(userIdString))
+            if (string.IsNullOrEmpty(userIdString))
             {
                 return RedirectToAction("Login", "Auth");
             }

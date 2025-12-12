@@ -12,5 +12,7 @@ namespace BankingApp.Interface.Services
         public Task<BaseResponse<IReadOnlyList<UserDto>>> ListOfCustomerUsersByBankAsync(string bankName, CancellationToken cancellationToken);
         public Task<BaseResponse<IReadOnlyList<UserDto>>> GetAllCustomerUsersAsync(CancellationToken cancellationToken);
 
+        public Task<BaseResponse<CardInformationDto>> GetUserATMCardAsync(Guid userId, CancellationToken cancellationToken);
+
     }
 }

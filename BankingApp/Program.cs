@@ -5,7 +5,6 @@ using BankingApp.Implementation.Services;
 using BankingApp.Interface.Repositories;
 using BankingApp.Interface.Services;
 using BankingApp.Models.DTOs.Auth.Validation;
-using BankingApp.Models.DTOs.User;
 using BankingApp.Models.Entities;
 using BankingApp.Persistence.Context;
 using FluentValidation;
