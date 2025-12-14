@@ -73,6 +73,7 @@ namespace BankingApp.Implementation.Repositories
                 .Where(u => u.Id == id)
                 .Include(u => u.Bank)
                 .Include(u => u.AccountDetails)
+                .Include(u => u.CardInformation)
                 .AsNoTracking()
                 .SingleOrDefaultAsync();
         }
@@ -80,6 +81,7 @@ namespace BankingApp.Implementation.Repositories
         public async Task<List<User>> ListOfUsers()
         {
             return await _bankContext.Set<User>()
+                .Where(u => u.Role.Name != "Admin")
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -95,6 +97,14 @@ namespace BankingApp.Implementation.Repositories
 
 
         }
+
+        public async Task<int> TotalCustomers()
+        {
+            return await _bankContext.Set<User>()
+                .CountAsync();
+        }
+
+
 
         public async Task<User> Update(User user)
         {

@@ -16,5 +16,6 @@ namespace BankingApp.Interface.Repositories
         Task<bool> ExistsByBank(string email, string bankName);
         Task<User> GetUserByEmail(string email);
         Task<CardInformation> GetUserATMCard(Guid userId);
+        Task<int> TotalCustomers();
     }
 }

@@ -25,6 +25,8 @@ namespace BankingApp.Implementation.Services
                 };
             }
 
+
+
             var newBank = new Bank(request.Name, request.BankBranch, request.Description);
             var createBank = await _bankRepository.Add(newBank);
 

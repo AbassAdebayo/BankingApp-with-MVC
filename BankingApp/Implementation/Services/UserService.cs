@@ -122,12 +122,13 @@ namespace BankingApp.Implementation.Services
                 Data = new UserDto
                 {
                     Id = customerProfile.Id,
-                    FirstName = customerProfile.FirstName,
-                    LastName = customerProfile.LastName,
+                    FullName = $"{customerProfile.FirstName} {customerProfile.LastName}",
                     PhoneNumber = customerProfile.PhoneNumber,
                     Email = customerProfile.Email,
+                    Gender = customerProfile.Gender,
                     DateOfBirth = customerProfile.DateOfBirth,
                     Address = customerProfile.Address,
+                    DateCreated = customerProfile.DateCreated,
                     Bank = new BankDto
                     {
                         Id = customerProfile.Bank.Id,
@@ -142,6 +143,12 @@ namespace BankingApp.Implementation.Services
                         AccountNumber = customerProfile.AccountDetails.AccountNumber,
                         AccountType = customerProfile.AccountDetails.AccountType,
                         Balance = customerProfile.AccountDetails.AccountBalance,
+                    },
+                    CardInformation = new CardInformationDto
+                    {
+                        CardCVV = customerProfile.CardInformation.CardCVV,
+                        CardNumber = customerProfile.CardInformation.CardNumber,
+                        Expiry = customerProfile.CardInformation.Expiry
                     }
 
                 }
@@ -196,8 +203,8 @@ namespace BankingApp.Implementation.Services
                 Data = customers.Select(c => new UserDto
                 {
                     Id = c.Id,
-                    FirstName = c.FirstName,
-                    LastName = c.LastName,
+                    Email = c.Email,
+                    FullName = $"{c.FirstName} {c.LastName}",
                     PhoneNumber = c.PhoneNumber,
                 }).ToList(),
 
@@ -254,6 +261,10 @@ namespace BankingApp.Implementation.Services
             return cardNumber;
         }
 
+        public async Task<int> TotalCountOfCustomersAsync()
+        {
+            return await _userRepository.TotalCustomers();
+        }
         private static string GenerateExpiry()
         {
             DateTime now = DateTime.UtcNow;
@@ -337,5 +348,6 @@ namespace BankingApp.Implementation.Services
             return (true, null);
         }
 
+        
     }
 }

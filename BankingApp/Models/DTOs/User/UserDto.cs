@@ -1,5 +1,4 @@
 ﻿using BankingApp.Models.DTOs.Bank;
-using BankingApp.Models.Entities;
 using BankingApp.Models.Enum;
 
 namespace BankingApp.Models.DTOs.User
@@ -16,8 +15,10 @@ namespace BankingApp.Models.DTOs.User
         public Gender Gender { get; set; }
         public BankDto Bank { get; set; }
         public AccountDetailsDto AccountDetails { get; set; }
+        public CardInformationDto CardInformation { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string FullName { get; set; }
         public string Email { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string PasswordHash { get; set; }

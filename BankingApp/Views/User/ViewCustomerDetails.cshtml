@@ -1,0 +1,89 @@
+﻿@using BankingApp.Models.DTOs
+@using BankingApp.Models.DTOs.User
+@model BaseResponse<UserDto>
+
+@{
+    Layout = "_AdminLayout";
+}
+
+
+<h1>Details</h1>
+
+
+<div class="card shadow-sm mb-4">
+        <h5>Customer Information</h5>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <b>Full Name:</b> @Html.DisplayFor(c => c.Data.FullName)
+            </div>
+            <div class="col-md-6">
+                <b>Adress:</b> @Model.Data.Address
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <b>Email:</b> @Html.DisplayFor(c => c.Data.Email)
+            </div>
+            <div class="col-md-4">
+                <b>Gender:</b> @Html.DisplayFor(c => c.Data.Gender)
+            </div>
+            <div class="col-md-4">
+            <b>D.O.B:</b>@Model.Data.DateOfBirth.ToString("dd/MM/yyyy")
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <b>Phone Number:</b> @Html.DisplayFor(m => m.Data.PhoneNumber)
+            </div>
+        </div>
+
+        <hr />
+
+        <h5>Account Details</h5>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <b>Bank:</b> @Html.DisplayFor(c => c.Data.Bank.Name)
+            </div>
+            <div class="col-md-6">
+                <b>Bank Branch:</b> @Html.DisplayFor(m => m.Data.Bank.BankBranch)
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <b>Account No:</b> @Html.DisplayFor(m => m.Data.AccountDetails.AccountNumber)
+            </div>
+            <div class="col-md-6">
+                <b>Account Bal:</b> @Html.DisplayFor(m => m.Data.AccountDetails.Balance)
+            </div>
+        <div class="col-md-6">
+            <b>Account Type:</b> @Html.DisplayFor(m => m.Data.AccountDetails.AccountType)
+        </div>
+        </div>
+        <hr />
+
+    <h5>Card Information</h5>
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <b>Card No:</b> @Html.DisplayFor(c => c.Data.CardInformation.CardNumber)
+        </div>
+        <div class="col-md-6">
+            <b>CVV:</b> @Html.DisplayFor(c => c.Data.CardInformation.CardCVV)
+        </div>
+        <div class="col-md-6">
+            <b>Expiry:</b> @Html.DisplayFor(c => c.Data.CardInformation.Expiry)
+        </div>
+    </div>
+    <hr />
+
+        <div class="row">
+            
+            <div class="col-md-6 text-end">
+                <b>Date Created:</b> @Model.Data.DateCreated.ToString("f")
+            </div>
+        </div>
+</div>
+
+<div>
+
+    <a asp-action="GetAllCustomers" asp-controller="User">Back to List</a>
+</div>

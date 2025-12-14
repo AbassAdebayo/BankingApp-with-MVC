@@ -1,5 +1,4 @@
 ﻿using BankingApp.Interface.Services;
-using BankingApp.Models.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -8,9 +7,10 @@ using System.Security.Claims;
 
 namespace BankingApp.Controllers
 {
-    public class AuthController(IAuthService authService) : Controller
+    public class AuthController(IAuthService authService, IUserService userService) : Controller
     {
         private readonly IAuthService _authService = authService ?? throw new ArgumentNullException(nameof(authService));
+        private readonly IUserService _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         public IActionResult Index()
         {
             return View();
@@ -23,9 +23,12 @@ namespace BankingApp.Controllers
             if (userIdString == null) return RedirectToAction("Login");
             return View();
         }
-
-        public IActionResult AdminDashBoard()
+        [HttpGet]
+        public async Task<IActionResult> AdminDashBoard()
         {
+            var totalCounts = await _userService.TotalCountOfCustomersAsync();
+
+            ViewBag.TotalCustomerCount = totalCounts;
             return View();
         }
 

@@ -36,6 +36,7 @@ namespace BankingApp.Models.Entities
             DateOfBirth = dateOfBirth;
             PasswordHash = passwordHash;
             PhoneNumber = phoneNumber;
+            DateCreated = DateTime.UtcNow;
         }
 
         public User(string firstName, string lastName, string address, string email, DateTime dateOfBirth, string passwordHash,

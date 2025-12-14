@@ -13,7 +13,7 @@ namespace BankingApp.Controllers
         private readonly IBankService _bankService = bankService ?? throw new ArgumentNullException(nameof(bankService));
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> GetAllCustomers()
         {
             var allUsers = await _userService.GetAllCustomerUsersAsync(CancellationToken.None);
             return View(allUsers);
@@ -102,10 +102,30 @@ namespace BankingApp.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> ViewCustomerDetails(Guid id)
+        {
+
+            var userCustomer = await _userService.GetCustomerUserProfileByUserIdAsync(id, CancellationToken.None);
+
+            if (userCustomer == null || !userCustomer.Status) return NotFound(userCustomer?.Message);
+
+            return View(userCustomer);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetAllCustomersByBank(string bankName)
         {
             var users = await _userService.ListOfCustomerUsersByBankAsync(bankName, CancellationToken.None);
             return View(users);
         }
+
+        //[HttpGet]
+        //public async Task<IActionResult> GetCustomerTotalCounts()
+        //{
+        //    var totalCounts = await _userService.TotalCountOfCustomersAsync();
+
+        //    ViewBag.TotalCustomerCount = totalCounts;
+        //    return View();
+        //}
     }
 }
